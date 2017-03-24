@@ -25,8 +25,7 @@ import UIKit
 
 class HomeTableVC: UITableViewController {
     
-    var games: NSArray? = nil
-    var rocketsGames: NSArray? = nil
+    var rocketsGames: [String: Any]? = nil
     let sports: [String] = ["nba", "mlb", "nfl"]
     let data: [String] = ["scoreboard"]
     let seasonName: String = "current"
@@ -69,20 +68,26 @@ class HomeTableVC: UITableViewController {
         
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-            print("Data get returned")
+            print("Data returned")
             if error != nil {
                 print("Error returned from request: " + error!.localizedDescription)
             } else {
-                print(response!)
+                // print(response!)
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
                     if jsonResult != nil {
                         if let results: NSDictionary = jsonResult!["scoreboard"] as? NSDictionary {
-                            self.games = results["gameScore"] as? NSArray
-                            for game in self.games! {
-                                print(game["ID"])
+                            let games = results["gameScore"] as? [[String: Any]]
+                            for gameAttributes in games! {
+                                let game = gameAttributes["game"] as? [String: Any]
+                                let awayTeams = game?["awayTeam"] as? [String: Any]
+                                let homeTeams = game?["homeTeam"] as? [String: Any]
+                                if String(describing: awayTeams!["Abbreviation"]!) == "HOU" || String(describing: homeTeams!["Abbreviation"]!) == "HOU" {
+                                    self.rocketsGames = game
+                                }
                             }
-                            if self.games != nil {
+                            
+                            if games != nil {
                                 DispatchQueue.main.async {
                                     self.tableView.reloadData()
                                 }
