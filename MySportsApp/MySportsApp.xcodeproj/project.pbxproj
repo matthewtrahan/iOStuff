@@ -12,6 +12,7 @@
 		712F7F111E854F9D000DBB65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 712F7F101E854F9D000DBB65 /* Assets.xcassets */; };
 		712F7F141E854F9D000DBB65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 712F7F121E854F9D000DBB65 /* LaunchScreen.storyboard */; };
 		712F7F1C1E855E90000DBB65 /* HomeTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712F7F1B1E855E90000DBB65 /* HomeTableVC.swift */; };
+		712F7F1E1E85B031000DBB65 /* GameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712F7F1D1E85B031000DBB65 /* GameTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		712F7F131E854F9D000DBB65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		712F7F151E854F9D000DBB65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		712F7F1B1E855E90000DBB65 /* HomeTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableVC.swift; sourceTree = "<group>"; };
+		712F7F1D1E85B031000DBB65 /* GameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				712F7F091E854F9D000DBB65 /* AppDelegate.swift */,
 				712F7F1B1E855E90000DBB65 /* HomeTableVC.swift */,
+				712F7F1D1E85B031000DBB65 /* GameTableViewCell.swift */,
 				712F7F0D1E854F9D000DBB65 /* Main.storyboard */,
 				712F7F101E854F9D000DBB65 /* Assets.xcassets */,
 				712F7F121E854F9D000DBB65 /* LaunchScreen.storyboard */,
@@ -139,6 +142,7 @@
 			files = (
 				712F7F1C1E855E90000DBB65 /* HomeTableVC.swift in Sources */,
 				712F7F0A1E854F9D000DBB65 /* AppDelegate.swift in Sources */,
+				712F7F1E1E85B031000DBB65 /* GameTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

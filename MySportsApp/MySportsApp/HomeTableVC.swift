@@ -112,15 +112,39 @@ class HomeTableVC: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return sports.count
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sports.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! GameTableViewCell
+        
+        if let homeTeamTextField = rocketsGames?["homeTeam"] as? [String: Any] {
+            let name = homeTeamTextField["City"]
+            cell.homeTeam.text = name as! String?
+        }
+        
+        if let awayTeamTextField = rocketsGames?["awayTeam"] as? [String: Any] {
+            let name = awayTeamTextField["City"]
+            cell.awayTeam.text = name as! String?
+        }
+        
+        if let timeForTextField = rocketsGames?["time"] {
+            cell.gameTime.text = String(describing: timeForTextField)
+        }
+        
+        if var dateForTextField = rocketsGames?["date"] {
+            let formatter = DateFormatter()
+            
+            formatter.dateFormat = "MM/dd"
+            dateForTextField = formatter.string(from: date!)
+            
+            cell.gameDate.text = String(describing: dateForTextField)
+        }
+        
         
         return cell
     }
