@@ -27,7 +27,7 @@ class HomeTableVC: UITableViewController {
     
     var rocketsGames: [String: Any]? = nil
     let sports: [String] = ["nba", "mlb", "nfl"]
-    let data: [String] = ["scoreboard"]
+    let data: [String] = ["scoreboard", "overall_team_standings"]
     let seasonName: String = "current"
     let format: String = "json"
     var date: Date?
@@ -44,10 +44,11 @@ class HomeTableVC: UITableViewController {
         let forDate = formatter.string(from: date!)
         
 
-        loadData(forDate: forDate)
+        loadGameData(forDate: forDate)
+        loadRecordData(forDate: forDate)
     }
     
-    func loadData(forDate: String) {
+    func loadGameData(forDate: String) {
         var urlPath = "https://www.mysportsfeeds.com/api/feed/pull/"
         urlPath += sports[0] + "/"
         urlPath += seasonName + "/"
@@ -68,7 +69,7 @@ class HomeTableVC: UITableViewController {
         
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-            print("Data returned")
+            print("Data returned for game.")
             if error != nil {
                 print("Error returned from request: " + error!.localizedDescription)
             } else {
@@ -92,7 +93,7 @@ class HomeTableVC: UITableViewController {
                                     self.tableView.reloadData()
                                 }
                             } else {
-                                print("'weather' element not found in returned payload")
+                                print("requested result not in payload")
                             }
                         }
                     }
@@ -101,6 +102,59 @@ class HomeTableVC: UITableViewController {
                 }
             }
         }) 
+        task.resume() // start the request
+    }
+    
+    func loadRecordData(forDate: String) {
+        var urlPath = "https://www.mysportsfeeds.com/api/feed/pull/"
+        urlPath += sports[0] + "/"
+        urlPath += seasonName + "/"
+        urlPath += data[1] + "." + format + "?"
+        urlPath += "teamstats=W,L"
+        
+        let url: URL? = URL(string: urlPath)
+        
+        if (url == nil) {
+            print("url is nil. Can't initiate request.")
+            return
+        }
+        
+        let session = URLSession.shared
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("Basic \(auth)", forHTTPHeaderField: "Authorization")
+        
+        
+        let task = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
+            print("Data returned for record.")
+            if error != nil {
+                print("Error returned from request: " + error!.localizedDescription)
+            } else {
+                // print(response!)
+                do {
+                    let jsonResult = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
+                    if jsonResult != nil {
+                        if let results: NSDictionary = jsonResult!["overallteamstandings"] as? NSDictionary {
+                            let teams = results["teamstandingsentry"] as? [[String: Any]]
+
+                            for team in teams! {
+                                
+                            }
+                            
+                            if teams != nil {
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                }
+                            } else {
+                                print("requested result not in payload")
+                            }
+                        }
+                    }
+                } catch {
+                    print("Error parsing the payload returned")
+                }
+            }
+        })
         task.resume() // start the request
     }
 
@@ -121,6 +175,16 @@ class HomeTableVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! GameTableViewCell
+        
+        if rocketsGames == nil {
+            cell.homeTeam.text = "No game today :("
+            cell.awayTeam.text = ""
+            cell.awayRecord.text = ""
+            cell.homeRecord.text = ""
+            cell.gameTime.text = ""
+            cell.gameDate.text = ""
+            return cell
+        }
         
         if let homeTeamTextField = rocketsGames?["homeTeam"] as? [String: Any] {
             let name = homeTeamTextField["City"]
