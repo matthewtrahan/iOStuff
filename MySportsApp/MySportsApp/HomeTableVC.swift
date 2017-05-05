@@ -22,6 +22,7 @@ extension String {
 }
 
 import UIKit
+import SwiftyJSON
 
 class HomeTableVC: UITableViewController {
     
